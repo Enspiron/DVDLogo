@@ -18,6 +18,7 @@ namespace DVDLogo
 
         public Game1()
         {
+            this.Window.AllowUserResizing = true;
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }

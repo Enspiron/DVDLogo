@@ -21,22 +21,64 @@ namespace DVDLogo
         public Logo(Texture2D image, Vector2 pos, Color tint)
             : base(image, pos, tint)
         {
-            //Scale = new Vector2(0.5f, 0.5f);
+            Scale = new Vector2(1, 1);
         }
-        int xspeed = 2;
-        int yspeed = 2;
+
+        static float speed = 2;
+
+        float xspeed = speed;
+        float yspeed = speed;
+
+        float scalex;
+        float scaley;
+
+        bool negativeX = false;
+        bool negativeY = false;
+
+        Random rnd = new Random();
 
         public void Animate(Vector2 screen)
         {
+            if (!negativeX)
+                xspeed = 2 * (screen.X / 800f);
+            else
+                xspeed = -2 * (screen.X / 800f);
+
+            if (!negativeY)
+                yspeed = 2 * (screen.X / 800f);
+            else
+                yspeed = -2 * (screen.X / 800f);
+
+            scalex = screen.X / 800f;
+            scaley = screen.Y / 480f;
+
+            Scale = new Vector2(scalex, scaley);
+
+            //xspeed = xspeed * scalex;
+            //yspeed = yspeed * scaley;
+
             Position.X += xspeed;
             Position.Y += yspeed;
-            if(Hitbox.Y + 60 >= screen.Y || Hitbox.Y <= 0)
+
+            if(Hitbox.X >= screen.X + 20 || Hitbox.X <= -10)
             {
-                yspeed = -yspeed;
+                Position = new Vector2(20, 20);
             }
-            if(Hitbox.X + 130 >= screen.X || Hitbox.X <= 0)
+            if(Hitbox.Y >= screen.Y + 20 || Hitbox.Y <= -10)
             {
+                Position = new Vector2(20, 20);
+            }
+            if (Hitbox.Y + (Scale.Y * 75 / Scale.Y * Scale.Y) >= screen.Y || Hitbox.Y <= 0)
+            {
+                Color = new Color(rnd.Next(0, 256), rnd.Next(0, 256), rnd.Next(0, 256));
+                yspeed = -yspeed;
+                negativeY = !negativeY;
+            }
+            if(Hitbox.X + (Scale.X * 165 / Scale.X * Scale.X) >= screen.X || Hitbox.X <= 0)
+            {
+                Color = new Color(rnd.Next(0, 256), rnd.Next(0, 256), rnd.Next(0, 256));
                 xspeed = -xspeed;
+                negativeX = !negativeX;
             }
         }
     }
